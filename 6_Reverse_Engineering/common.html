@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="reverse-engineering">Reverse Engineering</h1>
+<p>Working with only the assembler-code can be very hard and frustrating, especially when analyzing complex programs. So it is advised, that you figure out how the program will look in a higher level language than assembler. This may help to find out special behaviors (potential security leaks) or to see what data the program will need to work.</p>
+<p>Since developers are aware of reverse engineering, there are some counter-measures. One of them is code-obfuscation, which makes the binary much more complex than the original source code would be.</p>
+<p><em>Note: the serialnumber is numerical</em></p>
+<h2 id="exercise-1">Exercise 1</h2>
+<p>Try to figure out what how the c-program of the provided binary would look like. With this you can write a small program to figure out the right serial number.</p>
+<p>The usage of this program is <code>./ex1 username serialnumber</code></p>
+<p><a href="ex1.zip">download binary (zip)</a></p>
+<h2 id="exercise-2">Exercise 2</h2>
+<p>Similar to Exercise 1, you have to figure out what how the c-program of the provided binary would look like. But this time code is more complex.</p>
+<p>The usage of this program is <code>./ex2 username serialnumber</code></p>
+<p><a href="ex2.zip">download binary (zip)</a></p>
+</body>
+</html>

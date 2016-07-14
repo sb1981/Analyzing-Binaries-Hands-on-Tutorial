@@ -1,0 +1,7 @@
+Using built-in specs.
+COLLECT_GCC=i686-w64-mingw32-gcc
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/i686-w64-mingw32/5.3-win32/lto-wrapper
+Target: i686-w64-mingw32
+Configured with: ../../src/configure --build=x86_64-linux-gnu --prefix=/usr --includedir='/usr/include' --mandir='/usr/share/man' --infodir='/usr/share/info' --sysconfdir=/etc --localstatedir=/var --disable-silent-rules --libexecdir='/usr/lib/gcc-mingw-w64' --disable-maintainer-mode --disable-dependency-tracking --prefix=/usr --enable-shared --enable-static --disable-multilib --with-system-zlib --libexecdir=/usr/lib --without-included-gettext --libdir=/usr/lib --enable-libstdcxx-time=yes --with-tune=generic --enable-version-specific-runtime-libs --enable-fully-dynamic-string --enable-libgomp --enable-languages=c,c++,fortran,objc,obj-c++ --enable-lto --with-plugin-ld --enable-threads=win32 --program-suffix=-win32 --program-prefix=i686-w64-mingw32- --target=i686-w64-mingw32 --with-as=/usr/bin/i686-w64-mingw32-as --with-ld=/usr/bin/i686-w64-mingw32-ld --disable-libatomic
+Thread model: win32
+gcc version 5.3.1 20160205 (GCC) 

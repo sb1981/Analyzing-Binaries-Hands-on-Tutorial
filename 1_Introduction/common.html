@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="introduction">Introduction</h1>
+<p>The most popular software is IDA Pro by Hex-Rays SA. This commercial software is the de-facto standard in binary analysis, but it is quite expensive, which make it not very accessible for a hobby-researcher. There is the option to use an older version for free (v5.0), but this version is for non-commercial use only and lacks many features and there is also no support.</p>
+<p>An alternative to IDA Pro is an open-source project called Radare2, which is free to use and already offers quiet many professional features. More are added continuously or are getting improved, because the software is actively maintained and developed and gets more and more recognition in the security scene. You can take a look at a presentation from REcon 2015 about the differences about IDA Pro and Radare2 <a href="http://radare.org/get/recon2015.pdf">here</a>.</p>
+<p>Why we want to use binary analysis tools?</p>
+<p>Well, the reasons can be very different, for example:</p>
+<ul>
+<li>good intention:
+<ul>
+<li>malware analysis</li>
+<li>finding and fixing bugs</li>
+<li>reverse engineer software, where the source-code was lost</li>
+<li>Hacking competitions (CTF)</li>
+</ul></li>
+<li>bad intention:
+<ul>
+<li>cracking or reverse engineer protected commercial software</li>
+<li>adding harmful components to software</li>
+<li>break into systems</li>
+</ul></li>
+<li>something in between:
+<ul>
+<li>curiosity</li>
+</ul></li>
+</ul>
+<p>This tutorial will give you some exercises and sample solutions for basic situations to learn to get used to the usage of Radare2 and/or IDA Pro (v5.0 - free version). It is based on a learning by doing approach, and although the exercises are not hard to solve, you may get used to work with the software and therefore can move to more complex tasks by reading the official documentation and complete more advanced tutorials.</p>
+<p>What this tutorial is NOT about:</p>
+<ul>
+<li>showing all the features the software is capable of</li>
+<li>learning assembly language</li>
+<li>learning about security vulnerabilities in software</li>
+<li>doing something illegal (all the binaries provided are free and have their source-code included)</li>
+</ul>
+<p><em>Note: because there may be changes in the build environment, it is possible that the binaries are changed comparing to earlier versions of this tutorial.</em></p>
+</body>
+</html>

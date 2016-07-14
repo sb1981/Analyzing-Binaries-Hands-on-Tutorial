@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="solutions-for-ida-pro">Solutions for IDA Pro</h1>
+<p>When opening a binary in IDA Pro, we get a dialog with some settings. In our examples, we can just load the binary with the standard-setting.</p>
+<h2 id="exercise-1">Exercise 1</h2>
+<p>Since .so files are dynamic libraries, we check what functions are exported. Some of them are standard ones, so we may ignore it for this exercise.</p>
+<h3 id="ex1_1.so">ex1_1.so</h3>
+<p>Not supported (64 bit binary)</p>
+<h3 id="ex1_2.so">ex1_2.so</h3>
+<p>Exported functions:</p>
+<p><img src="ex1_2_exports.jpg" alt="ex1_2.so exports" /></p>
+<p>Functions in the binary:</p>
+<p><img src="ex1_2_functions.jpg" alt="ex1_2.so functions" /></p>
+<p>So it seems, that <code>func</code> is the function we are looking for. Let's view what happens in there:</p>
+<p><img src="ex1_2_func.jpg" alt="ex1_2.so func" /></p>
+<h3 id="ex1_3.so">ex1_3.so</h3>
+<p>Exported functions:</p>
+<p><img src="ex1_3_exports.jpg" alt="ex1_3.so exports" /></p>
+<p><code>func</code> disassembly:</p>
+<p><img src="ex1_3_func.jpg" alt="ex1_3.so func" /></p>
+<h3 id="ex1_4.so">ex1_4.so</h3>
+<p>Not supported (64 bit binary)</p>
+<h3 id="interpretation">Interpretation</h3>
+<p>If we look at the disassembled code, we see that they follow a similar structure:</p>
+<ol>
+<li>base- and stack-pointer preparation</li>
+<li>load a value into eax</li>
+<li>compare eax with another value</li>
+<li>conditional move (<code>cmovge</code> - Move if Greater Than or Equal to Zero)</li>
+<li>restore base-pointer and return</li>
+</ol>
+<p>A hint what is going on here are the <a href="https://en.wikipedia.org/wiki/X86_calling_conventions">calling conventions</a> for the different binaries (only the relevant are listed):</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Architecture</th>
+<th align="left">OS</th>
+<th align="left">Parameters in registers</th>
+<th align="left">Parameter order on stack</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">IA-32</td>
+<td align="left">linux</td>
+<td align="left"></td>
+<td align="left">right to left</td>
+</tr>
+<tr class="even">
+<td align="left">IA-32</td>
+<td align="left">windows</td>
+<td align="left"></td>
+<td align="left">right to left</td>
+</tr>
+</tbody>
+</table>
+<p>The return value is in the <code>eax</code> register.</p>
+<p>Now we see that the 2 function-parameters from <code>int func(int, int)</code> are either on the stack or in registers (depending on the architecture/OS). Since the difference in the code is only the copying of these parameters on the stack and the logic afterwards is the same we may assume that the base-logic of these 4 functions is the same.<br />
+When we now look at the 2 lines <code>mov eax, ...</code> and <code>cmp dword ...</code>, we see that this is a comparison between the 2 parameters of the function. When the value of the local value is greater then the one already in <code>eax</code>, the instruction <code>cmovge</code> puts this local value on <code>eax</code>, which is also the return value.</p>
+<p>So basically, a C-like code of this function would look like:</p>
+<pre><code>int func(int a, int b)
+{
+    if(a &gt; b)
+    {
+        a = b;
+    }
+    return a;
+}</code></pre>
+<p>or shorter:</p>
+<pre><code>int func(int a, int b)
+{
+    return (a &gt; b) ? a : b;
+}</code></pre>
+<h2 id="exercise-2">Exercise 2</h2>
+<p>After loading the binary, we see that there is automatically a graph generated starting at the main-function:</p>
+<p><img src="ex2_graph.jpg" alt="ex2 graph" /></p>
+<p>But just to be sure, that this is the only interesting part in the binary, we check the functions:</p>
+<p><img src="ex2_functions.jpg" alt="ex2 functions" /></p>
+<p>Ok, it really seems like that we only have to deal with the main-function here.</p>
+<p>Now let's see what happens here, so first we take a look st the starting block. We know, that the program takes 2 strings as input. We also know, that the entry-point of C-programs is <code>int main(int argc, char* argv[])</code>, so by looking at the code, we can assume that the 2 arguments are <code>argc</code> and <code>argv</code>, and therefore we can rename them by right clicking and select 'rename' (or select the argument and press 'n')</p>
+<p><img src="ex2_block1.jpg" alt="ex2 block1" /></p>
+<p>So at after dealing with stack- and base-pointer, there is a check, if there are exactly 3 parameters, and if not, we set <code>eax</code> to <code>-1</code> and exit the program.</p>
+<p><img src="ex2_block2.jpg" alt="ex2 block2" /></p>
+<p><img src="ex2_block3.jpg" alt="ex2 block3" /></p>
+<p>Now we take a look to the other blocks. There are 3 blocks which set the exit-code to 0, 1 and 2.</p>
+<p><img src="ex2_block5.jpg" alt="ex2 block5" /></p>
+<p>And we also have some sort of counter (<code>var_4</code>):</p>
+<p><img src="ex2_block6.jpg" alt="ex2 block6" /></p>
+<p>The interesting part lies in the 4 similar looking blocks:</p>
+<p><img src="ex2_block4.jpg" alt="ex2 block4" /></p>
+<p>Which is equally to the c-code <code>if (argv[2][counter]==0)</code> or <code>argv[1][counter]==0</code> for some of the other similar blocks).</p>
+<p>Using this we can step through the graph to rebuild a C-code:</p>
+<pre><code>int main(int argc, char* argv[])
+{
+    int counter = 0;
+    if(argc == 3)
+    {
+start:
+        if (argv[1][counter]==0)
+        {
+            if (argv[2][counter]==0)
+            {
+                return 0;
+            }
+            else
+            {
+                counter++;
+                goto start;
+            }
+        }
+        else
+        {
+            if (argv[2][counter]==0)
+            {
+                return 1;
+            }
+            else
+            {
+                if (argv[1][counter]==0)
+                {
+                    return 2;
+                }
+                else
+                {
+                    counter++;
+                    goto start;
+                }
+                
+            }
+        }
+
+    }
+    return -1;
+}
+</code></pre>
+<p>after some cleaning-up we get:</p>
+<pre><code>int main(int argc, char* argv[])
+{
+    int counter = 0;
+    if(argc == 3)
+    {
+        while(1)
+        {
+            if (argv[1][counter]==0)
+            {
+                if (argv[2][counter]==0)
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                if (argv[2][counter]==0)
+                {
+                    return 1;
+                }
+                else
+                {
+                    if (argv[1][counter]==0)
+                    {
+                        return 2;
+                    }
+                }
+            }
+        }
+
+    }
+    return -1;
+}
+</code></pre>
+<p>So this program returns which of the 2 given strings is smaller (or <code>0</code> if they are equally long) and <code>-1</code> when the wrong amount of arguments are provided.</p>
+<h2 id="exercise-3">Exercise 3</h2>
+<p>Again, first we check the functions of this binary:</p>
+<p><img src="ex3_functions.jpg" alt="ex3 functions" /></p>
+<p>Well, here we have some new interesting sounding functions:</p>
+<ul>
+<li><code>swap</code></li>
+<li><code>getLetterCount</code></li>
+<li><code>getMOLetter</code></li>
+</ul>
+<p>Next we take a look at the graph:</p>
+<p><img src="ex3_graph.jpg" alt="ex3 graph" /></p>
+<p>Now we have calls to additional functions, some of them are c-functions (<code>_printf</code> and <code>_strlen</code>) and some are in the same binary (<code>getMOLetter</code> and <code>swap</code>)</p>
+<p>The strings of the <code>printf</code> function are giving us very good hints what is going on.<br />
+First, we have a help-text to display the correct usage of the program. Then we will display the text 'Reversed: ' followed by a string and then we will display the letter with the most occurrences.</p>
+<p>Similar to the second exercise, we have some local variables, which we can try to figure out what their purpose is:</p>
+<ul>
+<li><code>local_4</code> is set to the result of strlen, so it should be better named length</li>
+<li><code>local_3</code> is initialized with 0, gets increased by 1, and gets compared with <code>length/2</code>, so that must be a counter of something like a for-loop</li>
+<li><code>local_2</code> is not clear, but since it is at the clean-up part of the program, we can ignore it (seems to be used to save ecx, ebx and ebp to ebp-0x8, ebp-0x4, ebp)</li>
+</ul>
+<p>We might also notice, that <code>ebx</code> is used quiet often, and is only set once in the beginning to the address of <code>argc</code></p>
+<p>Also, we have some code-blocks with</p>
+<pre><code>mov eax, dword [ebx + 4]
+add eax, 4
+mov register, dword [eax]</code></pre>
+<p>which is like <code>register = argv[1]</code></p>
+<p>So what is the main-function doing now?</p>
+<ul>
+<li>At the beginning, <code>argc</code> is compared with <code>2</code>, and if it fails, a help-text about the program usage is displayed and the program quits.</li>
+<li>Then, we initialize <code>length</code> with <code>strlen(argv[1])</code> and <code>counter</code> with <code>0</code>.</li>
+<li>Afterwards we jump to a comparison if <code>counter</code> is smaller than <code>length/2</code>, and if it succeed we call <code>swap</code> with <code>argv[1][counter]</code> and <code>argv[1][length-1-counter]</code>. From the function name, we can guess that the variables just get swapped in place, since we pass the addresses of the variables and not the value.</li>
+<li>When the loop is finished, we print <code>argv[1]</code>, which is now reversed.</li>
+<li>Next, <code>getMOLetter</code> is called and the result is displayed with the format-text <code>Letter with the most occurrency is: %c</code>. This may give us the conclusion, that <code>getMOLetter</code> is returning the character of the letter with the highest occurrence.</li>
+</ul>
+<p>So, with this, the task of this exercise is completed. We could also analyze the functions itself, but it is not really necessary, because we already know what is going on. However, when we inspect some malware or binaries with some obfuscation, we would still hate to take a look inside of these content, because we can never be sure that the functions do what the name says.</p>
+</body>
+</html>

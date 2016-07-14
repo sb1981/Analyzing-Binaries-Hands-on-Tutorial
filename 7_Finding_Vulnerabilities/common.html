@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="finding-vulnerabilities">Finding Vulnerabilities</h1>
+<p>When analyzing binaries, you may want to know if there are some vulnerabilities you may take care of.<br />
+When you have access to the source code, you usually begin to look for potential problems there, but it is also possible to look at the binary directly with the help of a binary analyzation tool.</p>
+<p>It may be helpful to try to figure out how the source-code would look like, but this exercises should be possible to solve without it. You have to see, how the input-data is handled and how the memory changes depending on the input.</p>
+<h2 id="exercise-1">Exercise 1</h2>
+<p>Try to find an argument-string, so that the program shows you the 'WIN' output.</p>
+<p>The usage of this program is <code>./ex1</code></p>
+<p>Hint: look at the buffer sizes</p>
+<p><a href="ex1.zip">download binary (zip)</a></p>
+<h2 id="exercise-2">Exercise 2</h2>
+<p>Again, try to find an argument-string, so that the program shows you the 'WIN' output.</p>
+<p>The usage of this program is <code>./ex2 password</code></p>
+<p>Hint: look at the format-string documentation.</p>
+<p><a href="ex2.zip">download binary (zip)</a></p>
+</body>
+</html>

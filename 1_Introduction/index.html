@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>1 Introduction</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../tabs.css">
+</head><body><h1>1 Introduction</h1><div id="container"><input id="tab-1" type="radio" name="tab-group" checked="checked" />
+<label for="tab-1">common</label><input id="tab-2" type="radio" name="tab-group" />
+<label for="tab-2">ida</label><input id="tab-3" type="radio" name="tab-group" />
+<label for="tab-3">radare2</label><div id="content"><div id="content-1"><body>
+<h1 id="introduction">Introduction</h1>
+<p>The most popular software is IDA Pro by Hex-Rays SA. This commercial software is the de-facto standard in binary analysis, but it is quite expensive, which make it not very accessible for a hobby-researcher. There is the option to use an older version for free (v5.0), but this version is for non-commercial use only and lacks many features and there is also no support.</p>
+<p>An alternative to IDA Pro is an open-source project called Radare2, which is free to use and already offers quiet many professional features. More are added continuously or are getting improved, because the software is actively maintained and developed and gets more and more recognition in the security scene. You can take a look at a presentation from REcon 2015 about the differences about IDA Pro and Radare2 <a href="http://radare.org/get/recon2015.pdf">here</a>.</p>
+<p>Why we want to use binary analysis tools?</p>
+<p>Well, the reasons can be very different, for example:</p>
+<ul>
+<li>good intention:
+<ul>
+<li>malware analysis</li>
+<li>finding and fixing bugs</li>
+<li>reverse engineer software, where the source-code was lost</li>
+<li>Hacking competitions (CTF)</li>
+</ul></li>
+<li>bad intention:
+<ul>
+<li>cracking or reverse engineer protected commercial software</li>
+<li>adding harmful components to software</li>
+<li>break into systems</li>
+</ul></li>
+<li>something in between:
+<ul>
+<li>curiosity</li>
+</ul></li>
+</ul>
+<p>This tutorial will give you some exercises and sample solutions for basic situations to learn to get used to the usage of Radare2 and/or IDA Pro (v5.0 - free version). It is based on a learning by doing approach, and although the exercises are not hard to solve, you may get used to work with the software and therefore can move to more complex tasks by reading the official documentation and complete more advanced tutorials.</p>
+<p>What this tutorial is NOT about:</p>
+<ul>
+<li>showing all the features the software is capable of</li>
+<li>learning assembly language</li>
+<li>learning about security vulnerabilities in software</li>
+<li>doing something illegal (all the binaries provided are free and have their source-code included)</li>
+</ul>
+<p><em>Note: because there may be changes in the build environment, it is possible that the binaries are changed comparing to earlier versions of this tutorial.</em></p>
+</div><div id="content-2"><body>
+<h1 id="introduction-ida-pro">Introduction IDA Pro</h1>
+<p><em>The IDA Disassembler and Debugger is an interactive, programmable, extendible, multi-processor disassembler hosted on Windows, Linux, or Mac OS X. IDA has become the de-facto standard for the analysis of hostile code, vulnerability research and COTS validation. See this executive overview for a summary of its features and uses.</em></p>
+<p>(citation from <a href="https://www.hex-rays.com/products/ida/overview.shtml">IDA-Homepage</a>)</p>
+<p>IDA Pro is quiet expensive for a hobby-researcher, but there is an older version of IDA Pro (v5.0), which is available <a href="https://www.hex-rays.com/products/ida/support/download_freeware.shtml">here</a>. You can also try an evaluation version with some limitation of the most recent version by downloading the installer <a href="https://www.hex-rays.com/products/ida/support/download_demo.shtml">here</a>.</p>
+<p><em>Please note, that some of the exercised could not be done with the free version of IDA Pro, because there is no support for 64bit binaries</em></p>
+<p>There is an <a href="https://www.hex-rays.com/products/ida/support/idadoc/">online manual</a> and also some <a href="https://www.hex-rays.com/products/ida/support/tutorials/index.shtml">tutorials</a> provided on the homepage.</p>
+</div><div id="content-3"><body>
+<h1 id="introduction-radare2">Introduction Radare2</h1>
+<p>A good explanation about Radare2 is in the Radare2 Book, which a free available online <a href="https://radare.gitbooks.io/radare2book/content/introduction/history.html">here</a>:</p>
+<p><em>The radare project began in February of 2006 to provide a free and simple command-line hexadecimal editor with support for 64-bit offsets. The intention was to use the tool to perform searches and help recover data from hard-disks.</em></p>
+<p>_Since then, the project has evolved to provide a complete framework for analyzing binaries while making use of basic *NIX concepts. Those concepts include the famous &quot;everything is a file,&quot; &quot;small programs that interact using stdin/stdout,&quot; and &quot;keep it simple&quot; paradigms._</p>
+<p><em>It is mostly a single-person project. However, ideas and source code contributions are greatly appreciated.</em></p>
+<p><em>The central focus of this project is the hexadecimal editor. Additionally, this project contains an assembler/disassembler, code/data analysis and graphing tools, scripting features, easy Unix integration, and more.</em></p>
+<p>You can get the most recent version of radare2 <a href="http://radare.org/r/">here</a></p>
+</div></div></div></body>

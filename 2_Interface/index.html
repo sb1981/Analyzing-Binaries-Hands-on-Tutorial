@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>2 Interface</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../tabs.css">
+</head><body><h1>2 Interface</h1><div id="container"><input id="tab-1" type="radio" name="tab-group" checked="checked" />
+<label for="tab-1">common</label><input id="tab-2" type="radio" name="tab-group" />
+<label for="tab-2">ida</label><input id="tab-3" type="radio" name="tab-group" />
+<label for="tab-3">radare2</label><div id="content"><div id="content-1"><body>
+<h1 id="interface">Interface</h1>
+<p>The interface of a binary analysis tool supports at least the viewing of following components:</p>
+<ul>
+<li>Disassembly of the binary</li>
+<li>Memory</li>
+<li>Registers</li>
+</ul>
+<p>A command-line interface may be harder to learn (especially for beginners), but it is better suited in environments where no desktop is available (for example embedded devices or ssh connections). Scripting is also easier in such environments.</p>
+<p>GUIs give a more convenient working environment, but they may get confusing if there is too many information displayed on screen or the interface is overloaded with different functions. But is much easier to get used to work with a new software if it has a GUI.</p>
+</div><div id="content-2"><body>
+<h1 id="ida-pro-interface">IDA Pro Interface</h1>
+<p>IDA Pro has a graphical interface, which makes it very comfortable to work with.</p>
+<p><img src="IDA_interface.jpg" alt="IDA Interface" /></p>
+<p>There are different windows for:</p>
+<ul>
+<li>Disassembly</li>
+<li>Hexcode</li>
+<li>Exports</li>
+<li>Imports</li>
+<li>Names</li>
+<li>Functions</li>
+<li>Strings</li>
+<li>etc...</li>
+</ul>
+<p>Commands can be given with menu/right-click or with keyboard-shortcuts.</p>
+</div><div id="content-3"><body>
+<h1 id="radare2-interface">Radare2 Interface</h1>
+<p>Radare2 is a software suite for analyzing binaries, which consist of the several tools (see below) around the 'main-program' radare2.</p>
+<p>In comparison to IDA, it is quiet hard to learn, because it basically only a command-line interface and no real GUI to work with. There are some improvements, like the Visual-Mode or the Web-GUI, but they don't offer the same functionality as the command-line interface (yet).</p>
+<p>There also exists a GUI frontend called 'Bokken', which is available <a href="https://inguma.eu/projects/bokken">here</a>. However, the solutions to the following exercises are done in plain Radare2.</p>
+<p>Radare2 is Open-Source and very actively developed, so there are still some features added or changed.<br />
+It is available on all major platforms and is also included in security-distribution like Kali Linux, so is is very handy if you know the basic usage of this software suite.</p>
+<h2 id="useful-links">Useful links</h2>
+<p>Homepage - <a href="http://radare.org/">Official Radare2 Page</a></p>
+<p>Book - <a href="https://www.gitbook.com/book/radare/radare2book/details">The official Radare2-Book</a></p>
+<p>Book - [Radare Explorations] (<a href="https://www.gitbook.com/book/monosource/radare2-explorations/details" class="uri">https://www.gitbook.com/book/monosource/radare2-explorations/details</a>)</p>
+<p>Tutorial - <a href="https://blog.techorganic.com/2016/03/08/radare-2-in-0x1e-minutes/">Radare 2 in 0x1E minutes</a></p>
+<p><a href="https://github.com/pwntester/cheatsheets/blob/master/radare2.md">Cheatsheet</a></p>
+<h2 id="radare2-suite">Radare2 Suite</h2>
+<p>You can find a detailed description about the usage of the programs <a href="https://github.com/pwntester/cheatsheets/blob/master/radare2.md#radare2-suite-commands">here</a></p>
+<table style="width:31%;">
+<colgroup>
+<col width="12%" />
+<col width="18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Tool</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rax2</td>
+<td align="left">Base Convertion</td>
+</tr>
+<tr class="even">
+<td align="left">rahash</td>
+<td align="left">Entropy, hashes and checksums</td>
+</tr>
+<tr class="odd">
+<td align="left">radiff</td>
+<td align="left">File diffing</td>
+</tr>
+<tr class="even">
+<td align="left">rasm2</td>
+<td align="left">Assembly-Disassembly</td>
+</tr>
+<tr class="odd">
+<td align="left">rafind2</td>
+<td align="left">Search</td>
+</tr>
+<tr class="even">
+<td align="left">ragg2</td>
+<td align="left">Shellcode generator, C/opcode compiler</td>
+</tr>
+<tr class="odd">
+<td align="left">rabin2</td>
+<td align="left">Executable analysis: symbols, imports, strings ...</td>
+</tr>
+<tr class="even">
+<td align="left">rarun2</td>
+<td align="left">Launcher to run programs with different environments, args, stdin, permissions, fds</td>
+</tr>
+<tr class="odd">
+<td align="left">r2pm</td>
+<td align="left">Radare2 Package Manager will install external plugins, tools and extras</td>
+</tr>
+</tbody>
+</table>
+<h2 id="command-line-parameters">Command Line Parameters</h2>
+<p><code>r2 [parameter] binary [arguments]</code></p>
+<p><code>-A</code> analyze executable at load time<br />
+<code>-L</code> list of supported IO plugins<br />
+<code>-c'cmds'</code> run r2 and execute commands<br />
+<code>-q</code> exit after processing commands<br />
+<code>-d</code> start debug mode</p>
+<h2 id="basic-commands">Basic Commands</h2>
+<p><code>i</code> list information about the binary<br />
+<code>V</code> switch to Visual Mode<br />
+<code>aa</code> analyze all<br />
+<code>afl</code> list functions<br />
+<code>pdf @ offset</code> print disassembly function<br />
+<code>iM</code> view entrypoint<br />
+<code>afn newname address</code> rename function<br />
+<code>afvn name newname</code> rename local variable<br />
+<code>afan name newname</code> rename function argument<br />
+<code>wx @ offset</code> write hex values in offset<br />
+<code>psz n @ offset</code> print n zero terminated String<br />
+<code>px n @ offset</code> print hexdump (or just x) of n bytes<br />
+<code>s offset</code> move cursor to address or symbol<br />
+<code>Ps name</code> save project<br />
+<code>Po name</code> load project</p>
+<h3 id="debug">Debug</h3>
+<p><code>db address</code> set breakpoint<br />
+<code>db -address</code> remove breakpoint<br />
+<code>do</code> reopen program<br />
+<code>dc</code> continue<br />
+<code>ds</code> step in<br />
+<code>dso</code> step out<br />
+<code>dss</code> skip instruction<br />
+<code>dp</code> shows debugged process, child processes and threads<br />
+<code>dm</code> shows memory map<br />
+<code>dbt</code> shows backtrace<br />
+<code>dr</code> print registers</p>
+<h2 id="visual-mode">Visual Mode</h2>
+<p><code>p</code> / <code>P</code> cycle through visual modes<br />
+<code>v</code> analyze mode<br />
+<code>V</code> enter graph mode<br />
+<code>q</code> exit visual mode</p>
+<h2 id="graph-mode">Graph Mode</h2>
+<p><code>w</code>/<code>s</code>/<code>a</code>/<code>d</code> navigate (faster with <code>shift</code>)<br />
+<code>cursor</code> move node (faster with <code>shift</code>)<br />
+<code>t</code>/<code>f</code>/<code>u</code> walk around the nodes<br />
+<code>O</code> show bytes/flags<br />
+<code>z</code>/<code>Z</code> debug within them<br />
+<code>x</code>/<code>X</code> jump around xrefs</p>
+<h3 id="debug-1">Debug</h3>
+<p><code>F2</code> toggle breakpoints<br />
+<code>F7</code> / <code>s</code> single-step<br />
+<code>F8</code> / <code>S</code> step-over<br />
+<code>F9</code> continue</p>
+<h2 id="misc">Misc</h2>
+<h3 id="stack">Stack</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Address</th>
+<th align="left">Content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">...</td>
+<td align="left">...</td>
+</tr>
+<tr class="even">
+<td align="left">ebp + 0xC</td>
+<td align="left">argument 2</td>
+</tr>
+<tr class="odd">
+<td align="left">ebp + 0x8</td>
+<td align="left">argument 1</td>
+</tr>
+<tr class="even">
+<td align="left">ebp + 0x4</td>
+<td align="left">return address</td>
+</tr>
+<tr class="odd">
+<td align="left">ebp</td>
+<td align="left">saved ebp</td>
+</tr>
+<tr class="even">
+<td align="left">ebp - 0x4</td>
+<td align="left">local var 1</td>
+</tr>
+<tr class="odd">
+<td align="left">ebp - 0x8</td>
+<td align="left">local var 2</td>
+</tr>
+<tr class="even">
+<td align="left">...</td>
+<td align="left">...</td>
+</tr>
+</tbody>
+</table>
+</div></div></div></body>

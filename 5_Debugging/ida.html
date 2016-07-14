@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="solutions-for-ida-pro">Solutions for IDA Pro</h1>
+<p>As we saw in the exercises for '2. Understanding Algorithms', finding out what a binary is doing can be very time-consuming and only guessing what a program does is also not the best way to analyze a binary. So we use a debugger in addition to the features of Radare2, we used before.</p>
+<p>The debugger can be started with the menu or by pressing <code>F9</code>.</p>
+<h2 id="exercise-1">Exercise 1</h2>
+<p>When we load the program in IDA Pro, we are shown the function <code>start</code>, but not the main-function which we want. When we look at the functions, we see that there are too many of them to go through, so we need another solution to find out where the interesting code is.</p>
+<p><img src="ex1_functions.jpg" alt="ex1 functions" /></p>
+<p>But we can help our self by simply starting the program in a command window. This gives us the following output:<br />
+<code>Usage: ex1 password</code></p>
+<p>This means that somewhere in our program this string must printed and this is also where the relevant logic lies. So we go to the 'Strings window' and search for 'Usage:' (You can use the search-function from the menu)</p>
+<p><img src="ex1_strings.jpg" alt="ex1 strings" /></p>
+<p>By double-clicking the string, we are taken to the <code>.rdata</code> section of this string.</p>
+<p><img src="ex1_data.jpg" alt="ex1 data" /></p>
+<p>Here we see the <code>XREF</code>, where the string is used. Again, we can double-click it to get taken to the code-section where it is used. This function looks very similar to a main-function of a c-program. Also there is a check at the beginning, if there are enough arguments given, and when there is a wrong amount the error-message is displayed and the program exits.</p>
+<p><img src="ex1_graph.jpg" alt="ex1 graph" /></p>
+<p>By looking at the graph, we see that we have a <code>strcmp</code> with a string, which was returned by another function, and the second argument of our input. Let' set a breakpoint at <code>strcmp</code> (right-click and 'set breakpoint' or <code>F2</code>) and take a look at the parameters.</p>
+<p>To start the debugger with arguments for the program, we need to specify them in the 'Process options' (menu -&gt; debugger). We just use 'test' as our password.</p>
+<p>When starting the debugger, we hit a breakpoint right at the beginning. This was not the one we are looking for, so we just continue (<code>F9</code>) till the next breakpoint (which is now the one we defined)</p>
+<p>Since we know that in the x86 calling conventions, the parameter for a function have to be put on the stack. By looking at the code, we see that we don't have to look at the stack for the string-pointers, because they are still in <code>edx</code> and <code>eax</code>.</p>
+<p><img src="ex1_str2.jpg" alt="ex1 str2" /></p>
+<p>So we check, what's the content of these strings:</p>
+<p><img src="ex1_str1.jpg" alt="ex1 str1" /></p>
+<p><code>eax</code> is our string from the parameter, so <code>edx</code> points to the password. We can go to the stack-location, where <code>edx</code> points to by clicking at the small arrow left of <code>Stack[00002678]:var_9</code></p>
+<p><img src="ex1_str3.jpg" alt="ex1 str3" /></p>
+<p>Well, this is currently not very useful, but we see that there is some 0-terminated array there. Let's remove the format of the data for the items (select, then right-click and use 'undefine' or <code>U</code>)</p>
+<p><img src="ex1_str4.jpg" alt="ex1 str4" /></p>
+<p>Now this looks like a usable string. Now we start the program again with this string as password.</p>
+<pre><code>ex1 GoodJob!
+Password OK</code></pre>
+<p>Nice, so we solved exercise 1.</p>
+<h2 id="exercise-2">Exercise 2</h2>
+<p>Like in exercise 1 we have to find the main-function. When looking at the program-output, se see that we can search for 'Array 1:'. This gives us following graph: (sub_401570)</p>
+<p><img src="ex2_graph.jpg" alt="ex2 graph" /></p>
+<p>So we have 2 arrays here and 2 variables for the lengths of the arrays (9 and 10).<br />
+Then is seems that the arrays and their reversed content are printed.</p>
+<p>Now let's start the program and see what happens:</p>
+<p><img src="ex2_output.jpg" alt="ex2 output" /></p>
+<p>Ok, the first array is processed normally, but the second one crashed. Also the crash must occur while the reversing of the array.</p>
+<p>The crash happens on address <code>0040174A</code> in the following function:</p>
+<pre><code>.text:00401723 ; ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦ S U B R O U T I N E ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦
+.text:00401723
+.text:00401723 ; Attributes: bp-based frame
+.text:00401723
+.text:00401723 sub_401723 proc near                    ; CODE XREF: main+E5p
+.text:00401723                                         ; main+139p
+.text:00401723
+.text:00401723 var_C= dword ptr -0Ch
+.text:00401723 var_8= dword ptr -8
+.text:00401723 var_4= dword ptr -4
+.text:00401723 arg_0= dword ptr  8
+.text:00401723 arg_4= dword ptr  0Ch
+.text:00401723
+.text:00401723 push    ebp
+.text:00401724 mov     ebp, esp
+.text:00401726 sub     esp, 10h
+.text:00401729 mov     [ebp+var_4], 0
+.text:00401730 mov     eax, [ebp+arg_4]
+.text:00401733 sub     eax, 1
+.text:00401736 mov     [ebp+var_8], eax
+.text:00401739 jmp     short loc_40178D
+.text:0040173B ; ---------------------------------------------------------------------------
+.text:0040173B
+.text:0040173B loc_40173B:                             ; CODE XREF: sub_401723+70j
+.text:0040173B mov     eax, [ebp+var_4]
+.text:0040173E lea     edx, ds:0[eax*4]
+.text:00401745 mov     eax, [ebp+arg_0]
+.text:00401748 add     eax, edx
+.text:0040174A mov     eax, [eax]
+.text:0040174C mov     [ebp+var_C], eax
+.text:0040174F mov     eax, [ebp+var_4]
+.text:00401752 lea     edx, ds:0[eax*4]
+.text:00401759 mov     eax, [ebp+arg_0]
+.text:0040175C add     edx, eax
+.text:0040175E mov     eax, [ebp+var_8]
+.text:00401761 lea     ecx, ds:0[eax*4]
+.text:00401768 mov     eax, [ebp+arg_0]
+.text:0040176B add     eax, ecx
+.text:0040176D mov     eax, [eax]
+.text:0040176F mov     [edx], eax
+.text:00401771 mov     eax, [ebp+var_8]
+.text:00401774 lea     edx, ds:0[eax*4]
+.text:0040177B mov     eax, [ebp+arg_0]
+.text:0040177E add     edx, eax
+.text:00401780 mov     eax, [ebp+var_C]
+.text:00401783 mov     [edx], eax
+.text:00401785 add     [ebp+var_4], 1
+.text:00401789 sub     [ebp+var_8], 1
+.text:0040178D
+.text:0040178D loc_40178D:                             ; CODE XREF: sub_401723+16j
+.text:0040178D mov     eax, [ebp+var_4]
+.text:00401790 cmp     eax, [ebp+var_8]
+.text:00401793 jnz     short loc_40173B
+.text:00401795 nop
+.text:00401796 leave
+.text:00401797 retn
+.text:00401797 sub_401723 endp</code></pre>
+<p>Let's find out how this function is working. Obviously, it is some sort of reverse algorithm and has 2 arguments and 3 local variables.</p>
+<p>So we set a breakpoint at the start of the function (but after the ebp saving) and try to figure out what's in these arguments and variables.</p>
+<p>Arguments on stack:<br />
+<img src="ex2_stack.jpg" alt="ex2 stack" /></p>
+<p>Pointer from <code>arg_0</code>:<br />
+<img src="ex2_stack2.jpg" alt="ex2 stack2" /></p>
+<p>This means that <code>arg_0</code> is the array and <code>arg_4</code> is the length of the array.</p>
+<p>We also know that the function works with an array-length of 9, but not with 10.<br />
+To figure out what happened, we must go a little deeper here. Let's take a look on the local variables:</p>
+<ul>
+<li><code>var_4</code> - is initialized with <code>0</code> (<code>0x00401729</code>)</li>
+<li><code>var_8</code> - is initialized with <code>length-1</code> (<code>0x00401730 - 0x00401736</code>)</li>
+<li><code>var_C</code> - is used for some swapping of variables of the array, indexed by <code>var_4</code> and <code>var_8</code> (<code>0x0040173B</code> - <code>0x00401783</code>)</li>
+</ul>
+<p>We also see, that <code>var_4</code> and <code>var_8</code> are incremented/decremented and then there is a comparison if they are equal<br />
+(<code>0x00401785</code> - <code>0x00401789</code>).</p>
+<p>And here we might have our problem, the conditional jump at <code>0x00401793</code> is a <code>jnz</code>, but this can cause problems, because this only works on odd lengths of arrays. We also can confirm this behavior with the data we have extracted above. To fix this, the <code>jnz</code> would have to be replaced by a <code>js</code>.</p>
+<h2 id="exercise-3">Exercise 3</h2>
+<p>Again, finding the main-function is the first task here (hint: search for the string 'Usage:')</p>
+<p><img src="ex3_graph.jpg" alt="ex3 graph" /></p>
+<p>There is also a call to another function:</p>
+<p><img src="ex3_graph_func.jpg" alt="ex3 graph" /></p>
+<p>It seems that this function is to convert a string to a number. But without checking if the characters are really numbers.</p>
+<p>Our plan to find the right input is to start the program with different input parameters and see where the exceptions occur and how we have to alter the input to get past the errors. We also check the values of the variables, when they are assigned.</p>
+<p>Let's begin with <code>1234</code> as parameter:</p>
+<p><code>sub_401570</code> returns <code>0x000004d2</code>, which is <code>1234</code> in decimal. so the function works for the right input. The result is then stored in <code>var_4</code></p>
+<p>Next, there happens some 'magic' with bit-operators, which would be very painful to figure it out by our self. So we check, what is stored in the local-variables.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Position</th>
+<th align="left">Variable</th>
+<th align="left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0x004015F0</td>
+<td align="left">var_4</td>
+<td align="left">0x000004d2 (1234)</td>
+</tr>
+<tr class="even">
+<td align="left">0x0040160D</td>
+<td align="left">var_8</td>
+<td align="left">0x00000001 (1)</td>
+</tr>
+<tr class="odd">
+<td align="left">0x0040161A</td>
+<td align="left">var_4</td>
+<td align="left">0x000004d2 (1234)</td>
+</tr>
+<tr class="even">
+<td align="left">0x0040162D</td>
+<td align="left">var_8</td>
+<td align="left">0x00000000 (0)</td>
+</tr>
+</tbody>
+</table>
+<p>crash at the division at <code>0x00401636</code>.</p>
+<p>Now we start over again, but with another number. We try a larger one, because <code>var_8</code> gets derived from <code>var_4</code>, so we may guess, that there is perhaps a division there.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Position</th>
+<th align="left">Variable</th>
+<th align="left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0x004015F0</td>
+<td align="left">var_4</td>
+<td align="left">0x00003039 (12345)</td>
+</tr>
+<tr class="even">
+<td align="left">0x0040160D</td>
+<td align="left">var_8</td>
+<td align="left">0x0000000C (12)</td>
+</tr>
+<tr class="odd">
+<td align="left">0x0040161A</td>
+<td align="left">var_4</td>
+<td align="left">0x00000404 (1028)</td>
+</tr>
+<tr class="even">
+<td align="left">0x0040162D</td>
+<td align="left">var_8</td>
+<td align="left">0x00000000 (0)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Position</th>
+<th align="left">Variable</th>
+<th align="left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0x004015F0</td>
+<td align="left">var_4</td>
+<td align="left">0x0001e240 (123456)</td>
+</tr>
+<tr class="even">
+<td align="left">0x0040160D</td>
+<td align="left">var_8</td>
+<td align="left">0x0000007B (123)</td>
+</tr>
+<tr class="odd">
+<td align="left">0x0040161A</td>
+<td align="left">var_4</td>
+<td align="left">0x000003eb (1003)</td>
+</tr>
+<tr class="even">
+<td align="left">0x0040162D</td>
+<td align="left">var_8</td>
+<td align="left">0x00000001 (1)</td>
+</tr>
+</tbody>
+</table>
+<p>wow, this was actually working! (return code 0), why?</p>
+<p>We try to make some c-code (check the instructions to get some additional info beside the debug-output from the 3 different arguments):</p>
+<pre><code>var_4 = sub_401570(argv[1]);
+var_8 = var_4/1000;
+var_4 /= var_8;
+var_8 = var_4%2;</code></pre>
+<p>Then we also have some block for loading a character of <code>argv[1]</code> and multiply it with <code>var_4</code>, which is then the return value.</p>
+<pre><code>var_4 *= argv[1][6];</code></pre>
+<p>So for the program to finish with return code 0 and without crashing, the number must have exactly 7 digits (so the first potential division-error is also handled with, because there the number must be &gt; 1000), and the input/1000 also have to be an odd number. Interestingly, we could also input some other characters than numbers, and the program may also finish successfully :)</p>
+</body>
+</html>

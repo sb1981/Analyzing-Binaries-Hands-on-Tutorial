@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="disassemble-code">(Dis)Assemble Code</h1>
+<p>An integral part of a binary analyzation framework is to convert machine-code in a more human readable form. Normally, this is done on-the-fly when using the program. However, sometimes you may need to do this manually. It is also very useful to convert some assembly code fragments into machine code, for example when you want to write patches for binaries.</p>
+<h2 id="exercise-1">Exercise 1</h2>
+<p>Try to find out what platforms your framework supports for assemble and disassemble code</p>
+<h2 id="exercise-2">Exercise 2</h2>
+<p>Compile the following code-fragments into the machine-code (x86):</p>
+<p><code>mov eax, 0xDEADBEEF</code></p>
+<p>and</p>
+<p><code>push eax</code><br />
+<code>push ebx</code><br />
+<code>pop eax</code><br />
+<code>pop ebx</code></p>
+<h2 id="exercise-3">Exercise 3</h2>
+<p>Decompile the following machine-codes back into assembler-code:</p>
+<p><code>B4 00 B0 13 CD 10</code> into x86 assembly code</p>
+</body>
+</html>

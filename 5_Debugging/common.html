@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="debugging">Debugging</h1>
+<p>With the help of a disassembler, it is possible to understand what a binary is doing. But it is sometimes more helpful to see how the program behaves while running. This is where a debugger can be used. With it, you can figure out why a program crashes and look what is in the registers and the memory at a given point of the execution (very helpful to see with which parameters a function is called). It is also possible to step though each single instruction, so it is easier to find out where the error is really happening.</p>
+<h2 id="exercise-1">Exercise 1</h2>
+<p>The provided program makes a small password-check and displays if the input was the right password or not. Try to figure out the right password.</p>
+<p>Hint: check the c function-calls and their parameters</p>
+<p>The usage of this program is <code>./ex1 password</code></p>
+<p><a href="ex1.zip">download binary (zip)</a></p>
+<h2 id="exercise-2">Exercise 2</h2>
+<p>This example crashes when it is executed. Try to figure out where this happens and what error the developer made.</p>
+<p>The usage of this program is <code>./ex2</code></p>
+<p><a href="ex2.zip">download binary (zip)</a></p>
+<h2 id="exercise-3">Exercise 3</h2>
+<p>In this example, the program gets a number as input, does some calculation with it and should exit with the code 0.</p>
+<p>However, there are some bugs, which let the program crash, or you may also receive the wrong exit-code. So try to find out which input actually works and returns 0.</p>
+<p>The usage of this program is <code>./ex3 number</code></p>
+<p><a href="ex3.zip">download binary (zip)</a></p>
+</body>
+</html>
