@@ -34,7 +34,7 @@ f.write('</title>\n<meta charset="utf-8">\n<link rel="stylesheet" href="../tabs.
 #body
 f.write('<body><h1>')
 f.write(os.path.relpath(".","..").replace("_"," "))
-f.write('</h1>')
+f.write('</h1><a href="../index.html">Back to index</a><br><br>')
 
 f.write('<div id="container">')
 # content
